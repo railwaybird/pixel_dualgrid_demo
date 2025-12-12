@@ -12,7 +12,7 @@ enum { STONE, SOIL, GRASS }
 enum { Y_COORD, BLOCK_ID, TEX_ID } # индексы для terr_array
 var borders_shift : Array[int] = [36, 53, 5]
 var overlay_shift : Array[int] = [0, 68, 20]
-const CHUNK_SIZE : int = 100 
+const CHUNK_SIZE : int = 100
 
 func _ready() -> void:
 	# импорт картинков
@@ -25,11 +25,15 @@ func _ready() -> void:
 	tile_mat.shader = tile_shader
 	tile_mmi.material_override = tile_mat
 	tile_mat.set_shader_parameter("tex_array", tex_array)
+	tile_mmi.multimesh.instance_count = 5 * CHUNK_SIZE * CHUNK_SIZE
+	tile_mmi.multimesh.custom_aabb = AABB(Vector3(-1.0, -10.0, -1.0), Vector3(CHUNK_SIZE, 5.0, CHUNK_SIZE))
 	
 	var shadow_shader = load("res://shadow.gdshader")
 	var shadow_mat = ShaderMaterial.new()
 	shadow_mat.shader = shadow_shader
 	shadow_mmi.material_override = shadow_mat
+	shadow_mmi.multimesh.instance_count = CHUNK_SIZE * CHUNK_SIZE
+	tile_mmi.multimesh.custom_aabb = AABB(Vector3(-1.0, -9.0, -1.0), Vector3(CHUNK_SIZE, 9.5, CHUNK_SIZE))
 
 
 	# шумы для террейна
