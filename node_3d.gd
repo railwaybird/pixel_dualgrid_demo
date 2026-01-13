@@ -164,57 +164,7 @@ func create_borders (x: int, z: int, need_high_border: bool) -> void:
 	flags = check_border(x, z, down,  need_high_border, flags)
 	flags |= 2
 	flags = check_border(x, z, left,  need_high_border, flags)
-	
-	
-func create_overlays (x: int, z: int) -> void:
-	var center = terr_array[x][z]
-	var up     = terr_array[x][z-1]
-	var down   = terr_array[x][z+1]
-	var left   = terr_array[x-1][z]
-	var right  = terr_array[x+1][z]
-	var bit_id : int = 0
-	
-	if center[Y_COORD] == up[Y_COORD] and (up[BLOCK_ID] == SOIL or up[BLOCK_ID] == GRASS):
-		bit_id += 8
-	if center[Y_COORD] == right[Y_COORD] and (right[BLOCK_ID] == SOIL or right[BLOCK_ID] == GRASS):
-		bit_id += 4
-	if center[Y_COORD] == down[Y_COORD] and (down[BLOCK_ID] == SOIL or down[BLOCK_ID] == GRASS):
-		bit_id += 2
-	if center[Y_COORD] == left[Y_COORD] and (left[BLOCK_ID] == SOIL or left[BLOCK_ID] == GRASS):
-		bit_id += 1
-		
-	if bit_id != 0:
-		var coords = Vector3(x, center[Y_COORD] + 0.1, z)
-		var tex_id = 68 + bit_id
-		borders_array.append([coords, tex_id])
 
-func create_grass (x: int, z: int) -> void:
-	var center = terr_array[x][z]
-	var up     = terr_array[x][z-1]
-	var down   = terr_array[x][z+1]
-	var left   = terr_array[x-1][z]
-	var right  = terr_array[x+1][z]
-	var bit_id : int = 0
-	
-	if center[Y_COORD] != up[Y_COORD] or center[BLOCK_ID] == up[BLOCK_ID]:
-		bit_id += 8
-	if center[Y_COORD] != right[Y_COORD] or center[BLOCK_ID] == right[BLOCK_ID]:
-		bit_id += 4
-	if center[Y_COORD] != down[Y_COORD] or center[BLOCK_ID] == down[BLOCK_ID]:
-		bit_id += 2
-	if center[Y_COORD] != left[Y_COORD] or center[BLOCK_ID] == left[BLOCK_ID]:
-		bit_id += 1
-	
-	var coords = Vector3(x, center[Y_COORD] + 0.1, z)
-	var tex_id : int
-	if bit_id != 15:
-		tex_id = 21 + bit_id
-	else:
-		var noise_val : float = (noise_grass_2.get_noise_2d(x, z) + 1.0) * (noise_grass_1.get_noise_2d(x, z) + 1.0) * 0.25
-		tex_id = int(noise_val > 0.15) + int(noise_val > 0.2) + int(noise_val > 0.3) + int(noise_val > 0.45) + int(noise_val > 0.6)
-		
-	borders_array.append([coords, tex_id])
-	
 
 func create_texarray (folder: String, save_path: String) -> Texture2DArray:
 	var image_paths: Array[String] = []
